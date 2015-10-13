@@ -11,9 +11,6 @@ import com.octopepper.promiser.interfaces.Resolver;
 import java.util.Timer;
 import java.util.TimerTask;
 
-/*
- * Created by Yannick & Guillaume on 13/10/2015.
- */
 public class MainActivity extends AppCompatActivity {
 
     @Override

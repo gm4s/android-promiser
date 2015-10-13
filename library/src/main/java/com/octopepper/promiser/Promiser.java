@@ -5,9 +5,6 @@ import com.octopepper.promiser.interfaces.PromiseInitializer;
 import com.octopepper.promiser.interfaces.Rejecter;
 import com.octopepper.promiser.interfaces.Resolver;
 
-/*
- * Created by Yannick & Guillaume on 13/10/2015.
- */
 public class Promiser<T, U> {
 
     private PromiseState state;
