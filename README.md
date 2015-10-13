@@ -78,7 +78,7 @@ Promiser<String, Integer> p = new Promiser<>(
       });
 });
 ```
-Now we can handle the success or the error of this promise using the .success() and .error() callbacks :
+Now we can handle the success or the error of this promise using the ```.success()``` and ```.error()``` callbacks :
 
 ```java
 p.success((String result) -> {
