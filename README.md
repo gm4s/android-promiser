@@ -2,6 +2,17 @@
 
 A lightweight implementation of [Promises/A+](https://promisesaplus.com/) specification.
 
+<!--## Gradle
+
+Add the following dependency to ```build.gradle```:
+
+```
+dependencies {
+    ...
+    compile 'com.octopepper:promiser:1.0.0'
+}
+```-->
+
 ## Requirements
 
 This library is written using Java 8 syntax.
@@ -36,30 +47,12 @@ p.success((T result) -> {
 .error((U err) -> {
   // Handle error here
 
-})
+});
 ```
 
 ## Example
 
-For example let's mock an asynchronous process using a Timer :
-
-```java
-Promiser<String, Integer> p = new Promiser<String, Integer>(
-  (Resolver<String> resolve, Rejecter<Integer> reject) -> {
-
-      int DELAY = 500;
-      new Timer().schedule(new TimerTask() {
-          @Override
-          public void run() {
-             resolve.run("I'm done !"); //resolving
-             reject.run(404); //rejecting
-          }
-      }, DELAY);
-
-});
-```
-
-Or using **Retrofit V2**
+For example let's mock an asynchronous process using [**Retrofit v2**](http://square.github.io/retrofit/)
 
 ```java
 Promiser<String, Integer> p = new Promiser<>(
@@ -81,12 +74,28 @@ Promiser<String, Integer> p = new Promiser<>(
 Now we can handle the success or the error of this promise using the ```.success()``` and ```.error()``` callbacks :
 
 ```java
-p.success((String result) -> {
+p.success((String s) -> {
   // Handle success here
-})
-.error((Integer err) -> {
+
+}).error((Integer code) -> {
   // Handle failure here
-})
+
+});
+```
+
+or even better:
+```java
+p.success(this::resultSucceeded)
+  .error(this::resultError);
+
+private void resultSucceeded(String s) {
+  // Handle success here
+}
+
+private void resultError(Integer code) {
+  // Handle failure here
+
+}
 ```
 
 ## Next step

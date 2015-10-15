@@ -12,8 +12,8 @@ public class Promiser<T, U> {
     private Rejecter<U> _error = null;
     private PromiseInitializer<T, U> _init;
 
-    T resolveResult;
-    U rejectError;
+    private T resolveResult;
+    private U rejectError;
 
     public Promiser(PromiseInitializer<T, U> init) {
         this._init = init;
@@ -21,34 +21,31 @@ public class Promiser<T, U> {
         this.go();
     }
 
-    public Resolver<T> resolve = (T res) -> {
+    private Resolver<T> resolve = (T res) -> {
         state = PromiseState.FULFILLED;
         resolveResult = res;
         next();
     };
 
-    public Rejecter<U> reject = (U err) -> {
+    private Rejecter<U> reject = (U err) -> {
         state = PromiseState.REJECTED;
         rejectError = err;
         next();
     };
 
-    private void next () {
-        if(state == PromiseState.FULFILLED && this._success != null) {
+    private void next() {
+        if (state == PromiseState.FULFILLED && this._success != null) {
             this._success.run(resolveResult);
 
-        } else if(state == PromiseState.REJECTED && this._error != null) {
+        } else if (state == PromiseState.REJECTED && this._error != null) {
             this._error.run(rejectError);
-
-        } else {
-
         }
     }
 
 
     public Promiser<T, U> success(Resolver<T> pSuccess) {
         this._success = pSuccess;
-        if(state == PromiseState.FULFILLED) {
+        if (state == PromiseState.FULFILLED) {
             this._success.run(resolveResult);
         }
         return this;
@@ -56,13 +53,13 @@ public class Promiser<T, U> {
 
     public Promiser<T, U> error(Rejecter<U> pError) {
         this._error = pError;
-        if(state == PromiseState.REJECTED) {
+        if (state == PromiseState.REJECTED) {
             this._error.run(rejectError);
         }
         return this;
     }
 
-    public Promiser<T, U> go() {
+    private Promiser<T, U> go() {
         _init.run(this.resolve, this.reject);
         return this;
     }
