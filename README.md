@@ -104,15 +104,12 @@ private void resultError(Integer code) {
 }
 ```
 
-## Next step
+If you want to do multiple asynchronous tasks sequentially use ```.then()```
 
-* Make a Promiser instance "thenable" so we can have a ```.then()``` and ```.catch()``` callbacks and provide an asynchronous flow control using ```.then()``` like this :
-
-```java
-p.then(...)
-  .then(...)
-  .then(...)
-  .catch(...)
+```
+fetchUser()
+    .then(str -> )
+    .then(i -> );
 ```
 
 ## Contributors

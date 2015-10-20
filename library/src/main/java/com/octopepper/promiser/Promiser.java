@@ -4,6 +4,7 @@ import com.octopepper.promiser.enums.PromiseState;
 import com.octopepper.promiser.interfaces.PromiseInitializer;
 import com.octopepper.promiser.interfaces.Rejecter;
 import com.octopepper.promiser.interfaces.Resolver;
+import com.octopepper.promiser.interfaces.Thenable;
 
 public class Promiser<T, U> {
 
@@ -40,6 +41,25 @@ public class Promiser<T, U> {
         }
     }
 
+    public <X> Promiser<X, U> then(Thenable<T, X> pThen) {
+        if (resolveResult instanceof Promiser) {
+//            resolveResult =
+//            return new Promiser<>((res, rej) -> {
+//
+//            });
+            return null;
+        } else {
+            return new Promiser<>((res, rej) -> {
+                if (state == PromiseState.FULFILLED) {
+                    res.run(pThen.run(resolveResult));
+                } else if (state == PromiseState.REJECTED) {
+                    // Do nothing for the moment
+                } else {
+                    this._success = t -> res.run(pThen.run(resolveResult));
+                }
+            });
+        }
+    }
 
     public Promiser<T, U> success(Resolver<T> pSuccess) {
         this._success = pSuccess;
