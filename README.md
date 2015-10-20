@@ -79,7 +79,7 @@ Now we can handle the success or the error of this promise using the ```.success
 ```java
 fetchUsers()
     .success(str -> {
-    // Handle success here
+      // Handle success here
 
     }).error(code -> {
       // Handle error here
