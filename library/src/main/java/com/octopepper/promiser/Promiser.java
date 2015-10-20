@@ -14,24 +14,22 @@ public class Promiser<T, U> {
 
     private T resolveResult;
     private U rejectError;
+    private Resolver<T> resolve = (T res) -> {
+        state = PromiseState.FULFILLED;
+        resolveResult = res;
+        next();
+    };
+    private Rejecter<U> reject = (U err) -> {
+        state = PromiseState.REJECTED;
+        rejectError = err;
+        next();
+    };
 
     public Promiser(PromiseInitializer<T, U> init) {
         this._init = init;
         state = PromiseState.PENDING;
         this.go();
     }
-
-    private Resolver<T> resolve = (T res) -> {
-        state = PromiseState.FULFILLED;
-        resolveResult = res;
-        next();
-    };
-
-    private Rejecter<U> reject = (U err) -> {
-        state = PromiseState.REJECTED;
-        rejectError = err;
-        next();
-    };
 
     private void next() {
         if (state == PromiseState.FULFILLED && this._success != null) {

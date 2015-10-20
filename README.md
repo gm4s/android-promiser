@@ -2,16 +2,16 @@
 
 A lightweight implementation of [Promises/A+](https://promisesaplus.com/) specification.
 
-<!--## Gradle
+## Gradle
 
 Add the following dependency to ```build.gradle```:
 
 ```
 dependencies {
     ...
-    compile 'com.octopepper:promiser:1.0.0'
+    compile 'com.octopepper.promiser:android-promiser:1.0.1'
 }
-```-->
+```
 
 ## Requirements
 
@@ -55,45 +55,51 @@ p.success((T result) -> {
 For example let's mock an asynchronous process using [**Retrofit v2**](http://square.github.io/retrofit/)
 
 ```java
-Promiser<String, Integer> p = new Promiser<>(
-  (Resolver<String> resolve, Rejecter<Integer> reject) -> {
-      retrofit.getService(IUserService.class).fetchUsers().enqueue(new Callback<String>() {
-            @Override public void onResponse(Response<String> response) {
-              if(response.isSuccess())
-                resolve.run(response.body()); //resolving result
-              else
-                reject.run(response.code()); //rejecting error code
-            }
-    ​
-            @Override public void onFailure(Throwable t){
-              reject.run(CodeError.Undefined.getCode()); //reject error
-            }
-      });
-});
+public Promiser<String, Integer> fetchUsers() {
+        return new Promiser<>((resolve, reject) -> {
+            retrofit.getService(IUserService.class).fetchUsers().enqueue(new Callback<String>() {
+                @Override
+                public void onResponse(Response<String> response) {
+                    if (response.isSuccess())
+                        resolve.run(response.body()); //resolving result
+                    else
+                        reject.run(response.code()); //rejecting error code
+                }
+
+                @Override
+                public void onFailure(Throwable t) {
+                    reject.run(CodeError.Undefined.getCode()); //reject error
+                }
+            });
+        });
+}
 ```
 Now we can handle the success or the error of this promise using the ```.success()``` and ```.error()``` callbacks :
 
 ```java
-p.success((String s) -> {
-  // Handle success here
+fetchUsers()
+    .success(str -> {
+    // Handle success here
 
-}).error((Integer code) -> {
-  // Handle failure here
+    }).error(code -> {
+      // Handle error here
 
-});
+    });
 ```
 
 or even better:
 ```java
-p.success(this::resultSucceeded)
-  .error(this::resultError);
+fetchUsers()
+    .success(this::resultSucceeded)
+    .error(this::resultError);
 
 private void resultSucceeded(String s) {
   // Handle success here
+
 }
 
 private void resultError(Integer code) {
-  // Handle failure here
+  // Handle error here
 
 }
 ```
@@ -111,5 +117,5 @@ p.then(...)
 
 ## Contributors
 
-[YannickDot](https://github.com/YannickDot),
-[NodensN](https://github.com/NodensN)
+[NodensN](https://github.com/NodensN),
+[YannickDot](https://github.com/YannickDot)

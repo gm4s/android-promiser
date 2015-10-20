@@ -5,8 +5,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 
 import com.octopepper.promiser.Promiser;
-import com.octopepper.promiser.interfaces.Rejecter;
-import com.octopepper.promiser.interfaces.Resolver;
 
 import java.util.Random;
 import java.util.Timer;
@@ -18,12 +16,11 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
         getResult(init());
     }
 
     private Promiser<String, Integer> init() {
-        return new Promiser<>((Resolver<String> resolve, Rejecter<Integer> reject) -> {
+        return new Promiser<>((resolve, reject) -> {
             Log.e("TEST", "BEGIN");
             // Place your asynchronous process here, and make sure to trigger resolve.run() or reject.run() when needed.
             new Timer().schedule(new TimerTask() {
@@ -40,13 +37,13 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    private void getResult(Promiser<String, Integer> p) {
-        p.success(this::resultSucceeded)
+    private void getResult(Promiser<String, Integer> promise) {
+        promise.success(this::resultSucceeded)
                 .error(this::resultError);
     }
 
-    private void resultSucceeded(String s) {
-        Log.e("TEST", "SUCCESS : " + s);
+    private void resultSucceeded(String str) {
+        Log.e("TEST", "SUCCESS : " + str);
     }
 
     private void resultError(Integer code) {
