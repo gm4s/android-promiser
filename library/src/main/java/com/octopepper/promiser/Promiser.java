@@ -43,11 +43,9 @@ public class Promiser<T, U> {
 
     public <X> Promiser<X, U> then(Thenable<T, X> pThen) {
         if (resolveResult instanceof Promiser) {
-//            resolveResult =
-//            return new Promiser<>((res, rej) -> {
-//
-//            });
-            return null;
+            return new Promiser<>((res, rej) -> {
+//                then(t -> res.run(pThen.run(resolveResult)));
+            });
         } else {
             return new Promiser<>((res, rej) -> {
                 if (state == PromiseState.FULFILLED) {

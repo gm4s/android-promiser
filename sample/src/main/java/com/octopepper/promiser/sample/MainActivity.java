@@ -39,7 +39,8 @@ public class MainActivity extends AppCompatActivity {
 
     private void getResult(Promiser<String, Integer> promise) {
         promise.then(Integer::parseInt)
-                .then(integer -> init());
+                .then(integer -> init())
+                .then();
     }
 
     private void resultSucceeded(String str) {
