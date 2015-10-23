@@ -9,7 +9,7 @@ Add the following dependency to ```build.gradle```:
 ```
 dependencies {
     ...
-    compile 'com.octopepper.promiser:android-promiser:1.0.1'
+    compile 'com.octopepper.promiser:android-promiser:1.0.2'
 }
 ```
 
@@ -41,13 +41,25 @@ You can handle result and error cases like this now :
 
 ```java
 p.success((T result) -> {
-  // Handle success here
+      // Handle success here
 
-})
-.error((U err) -> {
-  // Handle error here
+    }).error((U err) -> {
+      // Handle error here
 
-});
+    });
+```
+
+If you want to do multiple asynchronous tasks sequentially use ```.then()```
+
+```java
+p.then((T result) -> {
+      // T instanceOf String
+      // example X = parseToInt(T)
+
+    }).then((X result) -> {
+      // Now X instanceOf int
+
+    });
 ```
 
 ## Example
@@ -87,6 +99,17 @@ fetchUsers()
     });
 ```
 
+```java
+fetchUsers()
+    .then(str -> {
+      // Parse Json to Object
+
+    }).then(users -> {
+      // Do something
+
+    });
+```
+
 or even better:
 ```java
 fetchUsers()
@@ -106,16 +129,21 @@ private void resultError(Integer code) {
 
 ## Next step
 
-* Make a Promiser instance "thenable" so we can have a ```.then()``` and ```.catch()``` callbacks and provide an asynchronous flow control using ```.then()``` like this :
+* Make ```.then()``` accept a Promiser as a return type. The Promiser returned will have to be resolved.
 
 ```java
-p.then(...)
-  .then(...)
-  .then(...)
-  .catch(...)
+fetchUser()
+    .then(user -> fetchPhotosByUser())
+    .then(photos -> {
+      // Do something
+
+    });
+
 ```
+
 
 ## Contributors
 
 [NodensN](https://github.com/NodensN),
-[YannickDot](https://github.com/YannickDot)
+[YannickDot](https://github.com/YannickDot),
+[s4cha](https://github.com/s4cha)

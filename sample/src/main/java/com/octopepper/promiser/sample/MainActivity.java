@@ -29,7 +29,7 @@ public class MainActivity extends AppCompatActivity {
                     Log.e("TEST", "END");
                     int i = randomNumber();
                     if (i % 2 == 0)
-                        resolve.run("JSON");
+                        resolve.run("1024");
                     else
                         reject.run(i);
                 }
@@ -38,16 +38,12 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void getResult(Promiser<String, Integer> promise) {
-        promise.success(this::resultSucceeded)
-                .error(this::resultError);
+        promise.then(Integer::parseInt)
+                .then(this::doSomething);
     }
 
-    private void resultSucceeded(String str) {
-        Log.e("TEST", "SUCCESS : " + str);
-    }
-
-    private void resultError(Integer code) {
-        Log.e("TEST", "ERROR : " + code);
+    private int doSomething(int i) {
+        return i * 1024 * 1024;
     }
 
     private int randomNumber() {
