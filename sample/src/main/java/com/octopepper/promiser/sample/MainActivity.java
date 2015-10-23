@@ -39,16 +39,11 @@ public class MainActivity extends AppCompatActivity {
 
     private void getResult(Promiser<String, Integer> promise) {
         promise.then(Integer::parseInt)
-                .then(integer -> init())
-                .then();
+                .then(this::doSomething);
     }
 
-    private void resultSucceeded(String str) {
-        Log.e("TEST", "SUCCESS : " + str);
-    }
-
-    private void resultError(Integer code) {
-        Log.e("TEST", "ERROR : " + code);
+    private int doSomething(int i) {
+        return i * 1024 * 1024;
     }
 
     private int randomNumber() {

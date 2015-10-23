@@ -42,21 +42,15 @@ public class Promiser<T, U> {
     }
 
     public <X> Promiser<X, U> then(Thenable<T, X> pThen) {
-        if (resolveResult instanceof Promiser) {
-            return new Promiser<>((res, rej) -> {
-//                then(t -> res.run(pThen.run(resolveResult)));
-            });
-        } else {
-            return new Promiser<>((res, rej) -> {
-                if (state == PromiseState.FULFILLED) {
-                    res.run(pThen.run(resolveResult));
-                } else if (state == PromiseState.REJECTED) {
-                    // Do nothing for the moment
-                } else {
-                    this._success = t -> res.run(pThen.run(resolveResult));
-                }
-            });
-        }
+        return new Promiser<>((res, rej) -> {
+            if (state == PromiseState.FULFILLED) {
+                res.run(pThen.run(resolveResult));
+            } else if (state == PromiseState.REJECTED) {
+                // Nothing for the moment
+            } else {
+                this._success = t -> res.run(pThen.run(resolveResult));
+            }
+        });
     }
 
     public Promiser<T, U> success(Resolver<T> pSuccess) {
